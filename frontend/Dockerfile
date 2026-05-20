@@ -1,7 +1,7 @@
 # =================================================================
 # 阶段一: 依赖下载与编译打包 (Build Stage)
 # =================================================================
-FROM node:22-alpine AS builder
+FROM node:18-alpine AS builder
 
 # 安装 pnpm 并配置国内极速镜像源
 RUN npm install -g pnpm --registry=https://registry.npmmirror.com
