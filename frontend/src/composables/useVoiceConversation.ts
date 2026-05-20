@@ -91,7 +91,10 @@ export function useVoiceConversation() {
 
     // B. 连接后端极简 WebSocket 服务 (支持协议与域名自适应，云端部署即装即用)
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const defaultWsUrl = `${protocol}//${window.location.hostname}:9090`
+    // 开发环境直连 9090 端口，生产环境（Docker 容器内）自动走同一个域名的 /ws 反向代理通道
+    const defaultWsUrl = import.meta.env.DEV
+      ? `${protocol}//${window.location.hostname}:9090`
+      : `${protocol}//${window.location.host}/ws`
     const WS_URL = (import.meta.env.VITE_VOICE_WS_URL as string | undefined) ?? defaultWsUrl
     ws = new WebSocket(WS_URL)
     ws.binaryType = 'arraybuffer'
