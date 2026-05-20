@@ -8,14 +8,9 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 安装系统级底层基础依赖 (如编译器等)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# 复制依赖描述文件并安装
+# 复制依赖描述文件并安装 (使用国内清华大学极速镜像源，加速 pip 依赖包拉取)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 # 复制后端所有代码到容器中
 COPY . .
