@@ -1,0 +1,14 @@
+/* 重置基础网页边距，确保暗黑大图背景完美融合 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0c0e17;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
