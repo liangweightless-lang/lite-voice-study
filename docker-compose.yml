@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # 1. 语音微服务后端
+  voice-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: voice-backend
+    restart: always
+    ports:
+      - "9090:9090"
+    # 自动加载后端 .env 密钥配置到容器环境变量中 (云端只需配置此文件即可)
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 2. 科技感前端网页控制台
+  voice-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: voice-frontend
+    restart: always
+    ports:
+      - "5173:80"  # 将容器内 Nginx 服务的 80 端口映射到主机的 5173 端口
+    depends_on:
+      - voice-backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
