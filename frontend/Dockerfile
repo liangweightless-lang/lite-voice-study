@@ -1,7 +1,8 @@
 # =================================================================
 # 阶段一: 依赖下载与编译打包 (Build Stage)
 # =================================================================
-FROM node:18-alpine AS builder
+# 使用国内极速高可用的 DaoCloud 代理源拉取 Node 22 镜像，确保绕过腾讯云 500 镜像报错
+FROM docker.m.daocloud.io/library/node:22-alpine AS builder
 
 # 安装 pnpm 并配置国内极速镜像源
 RUN npm install -g pnpm --registry=https://registry.npmmirror.com
@@ -20,7 +21,7 @@ RUN pnpm exec vite build
 # =================================================================
 # 阶段二: 轻量级 Nginx 运行环境 (Run Stage)
 # =================================================================
-FROM nginx:alpine
+FROM docker.m.daocloud.io/library/nginx:alpine
 
 # 将打包好的静态页面复制到 Nginx 默认静态资源路径
 COPY --from=builder /app/dist /usr/share/nginx/html
