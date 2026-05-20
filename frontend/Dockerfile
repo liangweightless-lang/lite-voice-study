@@ -13,9 +13,9 @@ COPY package.json pnpm-lock.yaml* ./
 RUN pnpm config set registry https://registry.npmmirror.com
 RUN pnpm install --frozen-lockfile
 
-# 复制前端全部代码进行生产环境构建
+# 复制前端全部代码进行生产环境构建 (绕过慢吞吞的 vue-tsc，直接执行极速 vite build)
 COPY . .
-RUN pnpm run build
+RUN pnpm exec vite build
 
 # =================================================================
 # 阶段二: 轻量级 Nginx 运行环境 (Run Stage)
